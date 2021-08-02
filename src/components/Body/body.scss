@@ -1,0 +1,47 @@
+.body {
+  display: grid;
+  grid-template: 1fr 1fr/5fr 3fr;
+
+  //   background-color: yellowgreen;
+  .code-editor {
+    background-color: hsl(210, 28%, 12%);
+    color: white;
+    grid-area: 1/1/-1/1;
+  }
+  h1 {
+    font-size: 1.2rem;
+    font-weight: lighter;
+    padding: 0.7rem 0.8rem;
+  }
+  textarea {
+    color: white;
+    font-size: 1rem;
+    box-sizing: border-box;
+    background: transparent;
+    resize: none;
+    width: 100%;
+    outline: none;
+    border: none;
+    padding: 0.8rem;
+    line-height: 1.5rem;
+    // border-collapse: true;
+  }
+  #input {
+    border-bottom: 2px solid hsl(210, 28%, 12%);
+    height: 100%;
+    background: hsla(0, 0%, 100%, 0.116);
+  }
+  #output {
+    background: hsla(0, 0%, 100%, 0.116);
+
+    height: 100%;
+  }
+  .input-section {
+    background-color: hsl(210, 15%, 24%);
+    color: white;
+  }
+  .output-section {
+    background-color: hsl(210, 15%, 24%);
+    color: white;
+  }
+}

@@ -1,0 +1,49 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+}
+.app {
+  width: 100%;
+  height: 100vh;
+  display: grid;
+  grid-template: 1fr 10fr 1fr /1fr;
+}
+.header {
+  background-color: hsl(210, 28%, 16%);
+  grid-area: 1/1/1/1;
+  color: white;
+}
+.body {
+}
+
+.footer {
+  background-color: hsl(210, 28%, 16%);
+  color: white;
+}
+::selection {
+  background: dodgerblue;
+}
+::spelling-error {
+  color: rgb(255, 0, 85);
+}
+::-webkit-scrollbar {
+  width: 0.4em;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.397);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: dodgerblue;
+}

@@ -1,0 +1,49 @@
+.code-editor {
+  height: 100%;
+  box-shadow: 0 0 1em inset;
+
+  .top-bar {
+    padding: 0.6em 2em;
+    background-color: hsl(210, 15%, 24%);
+    display: flex;
+    justify-content: space-between;
+    input.file-name {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: white;
+      font-size: 0.8rem;
+    }
+
+    .right {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      gap: 1em;
+      select {
+        padding: 0.3em;
+        border: none;
+        outline: none;
+        background: #4c545c;
+
+        color: white;
+        option {
+          padding: 0.3em;
+
+          border: none;
+          -webkit-appearance: none;
+          outline: none;
+        }
+      }
+    }
+  }
+}
+.ace_gutter {
+  background: hsl(210, 15%, 24%) !important;
+}
+.ace_gutter-active-line {
+  background: hsl(210, 15%, 30%) !important;
+}
+.ace_comment {
+  color: hsla(0, 0%, 100%, 0.37) !important;
+}
