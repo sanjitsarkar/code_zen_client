@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import AceEditor from 'react-ace'
+// import socket from "../socket/socket"
 // // import mode-<language> , this imports the style and colors for the selected language.
 import 'ace-builds/src-noconflict/mode-javascript'
 import 'ace-builds/src-noconflict/mode-python'
@@ -10,11 +11,16 @@ import 'ace-builds/src-noconflict/theme-monokai'
 import 'ace-builds/src-noconflict/ext-language_tools'
 import 'ace-builds/src-noconflict/ext-beautify'
 import './code_editor.scss'
-function CodeEditor({ saveCode,runCode}) {
+// import { instrument } from '@socket.io/admin-ui'
+import {io} from "socket.io-client"
+const SERVER = "http://127.0.0.1:5000";
+const INTERVAL = 10000
+function CodeEditor({ saveCode,runCode,id,user_id}) {
+    const [socket, setSocket] = useState("undefined.py")
     const languages = ["python", "c_cpp", "javascript"]
     const [compilerLanguage, setCompilerLanguage] = useState(languages[0])
 
-    const [fileName, setFileName] = useState("untitled.py")
+    const [fileName, setFileName] = useState("")
     const [title, setTitle] = useState(fileName.split(".")[0])
     const [format, setFormat] = useState(fileName.split(".")[1])
     const [language, setLanguage] = useState(languages[0])
@@ -24,6 +30,8 @@ function CodeEditor({ saveCode,runCode}) {
     const [code, setCode] = useState()
     const [run, setRun] = useState(false)
     const [toggleClass, setToggleClass] = useState("file-name")
+
+//  console.log("id",id)
     const changeFileFormat = (lang)=>
     {
         if (lang === "python") {
@@ -73,35 +81,86 @@ function CodeEditor({ saveCode,runCode}) {
         }
     }
 
-    // const runCode = ()=>
-    // {
-    //     setRun((run) => run = !run)
-    // }
-   
     useEffect(() => {
         setFormat(fileName.split(".")[1])
         setTitle(fileName.split(".")[0])
        
     }, [fileName])
 
+    useEffect(async() => {
+        if(!id) return
+        // console.log(id,"id")
+        const s = io(SERVER)
+        setSocket(s)
+        const response = await fetch("http://localhost:5000/code/"+id,{
+            credentials:"include"
+        })
+        const _code = await response.json()
+        // console.log(_code)
+        setCode(_code.code)
+        setFileName(_code.title+"."+_code.format)
+        setLanguage(_code.lang)
+        return ()=>{
+            s.disconnect()
+        }
+      }, [])
+      useEffect(() => {
+        if(socket==null || code==null || id==null) return
+        socket.emit("get_code",id,user_id)
+        
+    }, [socket])
+    useEffect(() => {
+        if(socket==null || code==null || id==null) return
+        const interval = setInterval(() => {
+            // console.log("saved",code,title,language,format)
+            socket.emit("save_code",code,title,language,format)
+        }, INTERVAL);
+        return ()=>{
+            clearInterval(interval)
+        }
+    }, [socket,code])
+   
+   
+    useEffect(() => {
+        if(socket==null || code==null || id==null) return
+        socket.emit('send_code',code,language,format,title)
+        // console.log("Send code",code,language,format,title)
+    }, [socket,code,title,language,format])
+
+    useEffect(() => {
+        if(socket==null || code==null || id==null) return
+        socket.on('receive_code',(_code,language,format,title)=>{
+            console.log("Received Code",_code,language,format,title)
+            setCode(_code)
+            // setLanguage(language)
+            // setFormat(format)
+            // setTitle(title)
+        })
+        
+    }, [socket,code])
+    
+ 
+
     return (
         <div className="code-editor">
             <div className="top-bar">
-                <input className={toggleClass} value={fileName} onChange={(e) => { setFileName(e.target.value) }} onDoubleClick={() => { toggleEdit() }}/>
+                <input className={toggleClass} value={fileName} onChange={(e) => { setFileName(e.target.value);
+                
+                }} onDoubleClick={() => { toggleEdit() }}/>
                 <div className="right">
                     <div className="language">
-                        <select name="language" id="" onChange={(e) => { setLanguage(e.target.value); changeFileFormat(e.target.value); }}>
-                            <option value="python" selected={ language==="python"}>Python</option>
-                            <option value="cpp" selected={ language==="cpp"}>C++</option>
-                            <option value="c" selected={ language==="c"}>C</option>
-                            <option value="javascript" selected={ language==="javascript"}>Javascript</option>
+                        <select name="language" id="" value={language} onChange={(e) => { setLanguage(e.target.value); changeFileFormat(e.target.value); }}>
+                            <option value="python" >Python</option>
+                            <option value="cpp" >C++</option>
+                            <option value="c" >C</option>
+                            <option value="javascript">Javascript</option>
                         </select>
                 </div>
-                    <div className="save" onClick={(e) => saveCode(e, title, code, format, language)}><i class="fas fa-save    "></i></div>
+                    <div className="save" onClick={(e) => saveCode(e, title, code, format, language)}><i className="fas fa-save    "></i></div>
                     <div className="run" onClick={(e) => runCode(e, title, code, format, language)}>
                         {  !run?
-                            (<i class="fa fa-play" aria-hidden="true" ></i> ):
-                            (<i class="fa fa-pause" aria-hidden="true"></i>)
+                            (<i className="fa fa-play" aria-hidden="true" ></i> ):
+                            (<i className="fa fa-pause" aria-hidden="true"></i>)
                         }
                     </div>
                     </div>

@@ -5,6 +5,7 @@ import Header from '../Header/Header'
 import './App.scss'
 import '../Body/body.scss'
 import Loader from '../Loader/Loader'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 export default function App() {
   const [user, setUser] = useState("")
   const [loading,setLoading] = useState(true)
@@ -12,8 +13,9 @@ export default function App() {
     try {
       let response = await fetch("http://localhost:5000/user", {credentials:"include"})
       response = await response.json()
-      console.log(response?.user);
+      // console.log(response?.user);
       setUser(response?.user)
+  
       setLoading(false)
     }
     catch (e) {
@@ -22,29 +24,39 @@ export default function App() {
     }
 
   }
-  useEffect(async () => {
-  
-   await getUser()
+  useEffect( () => {
+  getUser()
   }, [])
 
-  
+ 
   return (
+    <BrowserRouter>
     <div className="app">
       {
         !loading &&
           (<Header {...user} getUser = {getUser}/>) 
       }
-      {
-          !loading ?
+      <Switch>
+      <Route path="/" exact>
+       { !loading ?
           (<Body {...user} />) : (
             <Loader/>
           )
+}
+        </Route>
+        <Route path="/code/:id">
+          {
+            <Body {...user}/>
+          }
+        </Route>
+       
+      </Switch>
+      <Footer/>
 
       
-      
-      }
-      <Footer/>
     </div>
+    </BrowserRouter>
+    
   )
 }
 

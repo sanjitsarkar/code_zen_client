@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import Login from '../Login/Login'
 import Signup from '../Signup/Signup'
 import './header.scss'
@@ -22,7 +23,9 @@ function Header({ name, email, id ,getUser}) {
     }
     return (
         <div className="header">
-            <h1>CodeZen</h1>
+            <h1>
+               <Link to="/" className="site_title"> CodeZen</Link>
+                </h1>
             <h2>{name}</h2>
             {name && <button onClick={(e) => { logout(e) }}>Logout</button>}
             {!name && <Login getUser={getUser} />}
