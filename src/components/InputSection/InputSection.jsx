@@ -3,7 +3,7 @@ import './input_section.scss'
 import {io} from "socket.io-client"
 const SERVER = "http://127.0.0.1:5000";
 // const socket = io(SERVER)
-function InputSection({ setInput,id }) {
+function InputSection({ setInput}) {
     const [InputData, setInputData] = useState("")
     // const socketInstance = useRef(null);
     

@@ -1,6 +1,10 @@
 .footer {
-  height:8vh;
   display: flex;
-  justify-content: center;
   align-items: center;
+  .errors{
+    overflow: scroll-y;
+    padding: 1em;
+    font-size: .9rem;
+color:rgb(255, 198, 210);
+}
 }

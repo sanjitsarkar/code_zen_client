@@ -1,11 +1,13 @@
 import React from 'react'
 import "./loader.scss"
+import Loading from './loading.gif'
 function Loader() {
     return (
-        <div>
-            <div class="loadingio-spinner-ellipsis-6xf3sb2v3g"><div class="ldio-wz95p4eg6d">
-<div></div><div></div><div></div><div></div><div></div>
+        <div id="loader">
+         <div class="loadingio-spinner-bars-b82ytppmtmn"><div class="ldio-kijtbahzhda">
+<div></div><div></div><div></div><div></div>
 </div></div>
+
 
         </div>
     )

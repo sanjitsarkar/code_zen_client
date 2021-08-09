@@ -1,47 +1,58 @@
-import React, { useState,useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useState,useEffect,useContext,useReducer, createContext } from 'react'
+import { Redirect, useParams } from 'react-router-dom'
 import CodeEditor from '../CodeEditor/CodeEditor'
 import InputSection from '../InputSection/InputSection'
-import Modal from '../Modal/Modal'
 import OutputSection from '../OutpSection/OutputSection'
 import  './body.scss'
-function Body({ name, email, id, }) {
-    // const [code, setCode] = useState("")
-    // const [title, setTitle] = useState("")
-    // const [format, setFormat] = useState("")
-    // const [lang, setLang] = useState("")
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { CodeContext } from '../App/App'
+import { ToastContext } from '../App/App'
+import { saveCodeReducer,initialSaveCodeState } from '../../reducers/saveCodeReducer'
+import { runCodeReducer,initialRunCodeState } from '../../reducers/runCodeReducer'
+import Loading from '../Loader/Loader'
+import Footer from '../Footer/Footer'
+export const OutputContext = createContext()
+export const SaveCodeContext = createContext()
+function Body() {
     
-    // console.log(codeId)
+  
+   const codeCtx = useContext(CodeContext)
+   const {_code,dispatchCode}  = codeCtx
+   const toastCtx = useContext(ToastContext)
+  const {notifySuccess,notifyInfo} = toastCtx
     const [inputData, setInputData] = useState("")
     const [outputData, setOutputData] = useState("")
-    const [_id, set_Id] = useState(useParams().id)
-    const [codes, setCodes] = useState([])
+  const [savedCode, dispatchSaveCode] = useReducer(saveCodeReducer, initialSaveCodeState)
+  const [output, dispatchRunCode] = useReducer(runCodeReducer, initialRunCodeState)
 
     const codeId = useParams().id
-    const saveCode = async (e, title, code, format, lang) => {
-        // console.log("body",title, code, format, lang)
-        console.log("_id",_id)
+    const handleSaveCode = async (e, title, code, format, lang) => {
         e.preventDefault()
+        // const event = dispatchEvent(new KeyboardEvent())
+        // console.log("Event",e)
+
         try {
+            dispatchSaveCode({type:"LOADING"})
+            console.log("Id",codeId)
             let response = await fetch("http://localhost:5000/save", {
                 method: "POST",
-                body: JSON.stringify({ title, code, format, lang,_id }),
+                body: JSON.stringify({ title, code, format, lang,_id:codeId }),
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
                 
             })
             response = await response.json()
-            console.log("id",response);
-            if(!codeId)
-            set_Id(await response?.data?._id)
+            dispatchSaveCode({type:"SUCCESS",payload:response})
+            notifySuccess("Saved...")
+              
                 
         }
         catch (e) {
             console.log(e);
-            if(e.toString().includes("TypeError"))
-            {
-                alert("The filename with this title already exists, Please change the name of the file and try again...")
-            }
+            dispatchSaveCode({type:"FAILURE",payload:e.message})
+
+         
             
         }
     }
@@ -51,11 +62,12 @@ function Body({ name, email, id, }) {
     }
 
 
-    const runCode = async(e, title, code, format, language) => {
+    const handleRunCode = async(e, title, code, format, language) => {
+        
         e.preventDefault()
-        await saveCode(e, title, code, format, language)
-        if (_id)
-        {
+        dispatchRunCode({type:"LOADING"})
+        await handleSaveCode(e, title, code, format, language)
+        
             try {
                 let Idata = ""
                 if (inputData.includes("\n"))
@@ -68,54 +80,89 @@ function Body({ name, email, id, }) {
                     
             let response = await fetch("http://localhost:5000/compile", {
                 method: "POST",
-                body: JSON.stringify({ id:_id,input:Idata}),
+                body: JSON.stringify({ id:codeId,input:Idata}),
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
                 
             })
                 response = await response.json()
-                console.log(response);
-            setOutputData(response)
+                console.log("Response",response);
+                dispatchRunCode({type:"SUCCESS",payload:response})
+            notifySuccess("Compiled...")
+                
+              
                 
         }
         catch (e) {
             console.log(e);
+            dispatchRunCode({type:"FAILURE",payload:e.message})
             
         }
-        }
-        else {
-            alert("Save Code Before Compiling")
-        }
+        
+     
     }
     
-const fetchCodes = async() =>{
-  const response = await fetch("http://localhost:5000/codes",{credentials:"include"})
-  const codes = await response.json()
-  setCodes(codes)
-//   console.log(codes)
+
+const fetchCode = async() =>{
+    dispatchCode({type:"LOADING"})
+try{
+  let response = await fetch("http://localhost:5000/code/"+codeId,{credentials:"include"})
+  response = await response.json()
+dispatchCode({type:"SUCCESS",payload:response})
+
+//   console.log("code",code)
 }
+catch(e)
+{
+    console.log(e.message)
+dispatchCode({type:"FAILURE",payload:e.message})
+
+}
+}
+
+const shareCode = ()=>{
+    notifyInfo("Copy the url to share the code",{autoClose:3000})
+}
+
     useEffect(() => {
-       fetchCodes()
+        fetchCode()
+        
     }, [])
     return (
+    <OutputContext.Provider value={{output}}>
+
         <div className="body">
-            {!id &&
-            (
-                <h1>Login to continue</h1>
-            )
-            }
-            {
-                id && codes && !codeId &&(
-                    <Modal codes={codes}/>
-                
-                )
-            }
-            {codes && codeId &&
-                (<CodeEditor saveCode={saveCode} runCode={runCode} id = {codeId} user_id ={id}/>)}
-            {codes && codeId && (<InputSection setInput={setInput} id = {codeId} user_id ={id}/>)}
-            {codes && codeId && (<OutputSection outputData={outputData} id = {codeId} user_id ={id}/>)}
+{
             
+        
+             
+
+                    !_code.loading ?(
+                        !_code?.data?.status ?(
+                    <>
+            <CodeEditor saveCode={handleSaveCode} runCode={handleRunCode} _code = {_code.data} shareCode = {shareCode}/>
+            <InputSection setInput={setInput}  />
+            <OutputSection />
+            <Footer/>
+                    </>):(
+                     
+                            <Redirect to="/" />
+                            // _code?.data?.status
+                         
+
+                    )
+                    ):(
+                        <Loading/>
+                    )
+                
+                
+            
+
+            }
+
         </div>
+   
+    </OutputContext.Provider>
     )
 }
 

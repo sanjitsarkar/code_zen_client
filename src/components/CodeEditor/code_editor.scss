@@ -1,12 +1,20 @@
 .code-editor {
-  height: 100%;
+  textarea{
+    border-collapse: collapse;
+  }
   box-shadow: 0 0 1em inset;
-
   .top-bar {
     padding: 0.6em 2em;
     background-color: hsl(210, 15%, 24%);
     display: flex;
     justify-content: space-between;
+   
+    .run,.share,.save{
+ &:hover{
+  color:skyblue;
+            
+          }
+    }
     input.file-name {
       background: transparent;
       border: none;
