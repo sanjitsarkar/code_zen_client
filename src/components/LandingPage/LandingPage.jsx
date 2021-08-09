@@ -1,5 +1,6 @@
 import React,{useState} from 'react'
 import CodeGIF from "../../assets/demo.gif"
+import CodeIMG from "../../assets/code.png"
 import Signup from '../Signup/Signup'
 import "./landing_page.scss"
 
@@ -14,7 +15,7 @@ const LandingPage = () => {
                 <p>An online editor competitive coder, interviews, teaching and many more...</p>
                 <button onClick={(e) => { setIsModalOpenSignup(!isModalOpenSignup) }}>Register Now</button>
             </div>
-            <img srcSet={CodeGIF}/>
+            {/* <img srcSet={CodeIMG}/> */}
         </div>
     )
 }

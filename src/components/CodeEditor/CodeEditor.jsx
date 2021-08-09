@@ -256,7 +256,7 @@ int main() {
                
                 height: '93%',
                     width: '100%',
-                    background: 'hsl(210, 28%, 12%)'
+                    background: 'hsl(209, 37%, 15%)'
             }}
                 placeholder=''
                 theme="monokai"

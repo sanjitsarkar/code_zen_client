@@ -4,7 +4,7 @@
 
   //   background-color: yellowgreen;
   .code-editor {
-    background-color: hsl(210, 28%, 12%);
+    background-color: hsl(209, 19%, 30%);
     color: white;
     grid-area: 1/1/3/1;
   }
@@ -39,15 +39,17 @@
   .input-section {
     grid-area: 1/2/2/-1;
 
+  background-color: hsl(209, 37%, 22%);
     
-    background-color: hsl(210, 15%, 24%);
+    // background-color: hsl(210, 15%, 24%);
     color: white;
   }
   .output-section {
     grid-area: 2/2/2/-1;
 
+    background-color: hsl(209, 37%, 22%);
 
-    background-color: hsl(210, 15%, 24%);
+    // background-color: hsl(210, 15%, 24%);
     color: white;
   }
   .footer{
@@ -55,5 +57,7 @@
     overflow: auto;
     grid-area: 3/1/-1/-1;
     z-index: 99;
+    background-color: hsl(209, 45%, 18%);
+
   }
 }

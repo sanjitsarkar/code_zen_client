@@ -5,7 +5,9 @@
   box-shadow: 0 0 1em inset;
   .top-bar {
     padding: 0.6em 2em;
-    background-color: hsl(210, 15%, 24%);
+    // background-color: hsl(210, 15%, 24%);
+  background-color: hsl(209, 37%, 22%);
+
     display: flex;
     justify-content: space-between;
    
@@ -32,7 +34,7 @@
         padding: 0.3em;
         border: none;
         outline: none;
-        background: #4c545c;
+        background: #394a5c;
 
         color: white;
         option {
@@ -46,8 +48,14 @@
     }
   }
 }
+// .ace-editor{
+//   background-color: hsl(209, 37%, 22%) !important;
+
+// }
 .ace_gutter {
-  background: hsl(210, 15%, 24%) !important;
+  background-color: hsl(208, 42%, 19%) !important;
+
+  // background: hsl(210, 15%, 24%) !important;
 }
 .ace_gutter-active-line {
   background: hsl(210, 15%, 30%) !important;
