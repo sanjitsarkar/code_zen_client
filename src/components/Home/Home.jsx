@@ -203,7 +203,7 @@ const langImgUrl = {
                             <option value="python" >Python</option>
                             <option value="cpp" >C++</option>
                             <option value="c" >C</option>
-                            <option value="javascript">Javascript</option>
+                            {/* <option value="javascript">Javascript</option> */}
                         </select>
                         </div>
                 <button>Create</button>
