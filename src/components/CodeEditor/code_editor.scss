@@ -10,8 +10,18 @@
 
     display: flex;
     justify-content: space-between;
-   
-    .run,.share,.save{
+   .share{
+     span{
+       font-size: .9rem;
+     }
+     .share-switch{
+    
+     }
+     display: flex;
+     align-items: center;
+     gap: .5em;
+   }
+    .run,.save{
  &:hover{
   color:skyblue;
             

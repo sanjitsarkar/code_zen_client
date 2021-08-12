@@ -122,7 +122,15 @@ const deleteCode = async(e,id) =>{
   notifySuccess("Deleted Successfully")
   await fetchCodes()
 //   _codes.data=_codes.data.filter((code)=>code.id!==id)
-//   dispatchCodes({type:"SUCCESS",payload:response})
+//   dispatchCodes({type:"SUCCESS"useEffect(() => {
+    //     if(_code?.data?.user_id===_auth?.data?.user?.id)
+    //     {
+    //         console.log("Share is sending ",share)
+
+    //     socket.emit("share",share)
+    //     }
+        
+    // }, [socket,share]),payload:response})
 
 
 }

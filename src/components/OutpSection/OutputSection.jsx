@@ -5,40 +5,38 @@ import { OutputContext } from '../Body/Body';
 import Loading from '../Loader/Loader';
 import  "./output_section.scss"
 const SERVER = "http://127.0.0.1:5000";
-// const socket = io(SERVER)
-function OutputSection() {
+const socket = io(SERVER)
+function OutputSection({codeId}) {
     const outputCtx = useContext(OutputContext)
     const {output} = outputCtx
-    const [_output, setOutput] = useState("")
-    useEffect(() => {
-         setOutput(output.data.output)
-    }, [output])
-   
-// const socketInstance = useRef(null);
-    
+    const [_output, setOutput] = useState(OutputContext?.data?.output)
     // useEffect(() => {
-    //     socketInstance.current = io(SERVER);
-    //   if(socket.connected)
-    //   {
-    //   socket.on('output', (output) => {
+    //      setOutput(output.data.output)
 
-    //    console.log("output Recieved",output)
-    //    setOutput(output)
-    //   })
-    // }
+    // }, [])
+   
+    // const [socket,setSocket] = useState(io(SERVER))
 
-  
-    //   return () => {
-    //     socket.disconnect();
-    //   }
+    // useEffect(() => {
+    //     const s = io(SERVER)
+    //     setSocket(s)
+    //     // console.log(s)
+       
+    //     return () => {
+    //         s.disconnect()
+    //     }
     // }, [])
 
     // useEffect(() => {
-    //     setOutput(outputData.output)
-    //     setErrors(outputData.errors)
-    //     // socket.emit('output',output,id)
-     
-    // }, [outputData,output])
+    //     socket.emit("output",_output,codeId)
+    //     socket.on("output",(_output)=>{
+    //         console.log("outputData",_output)
+    //      setOutput(_output)
+    //     })
+    // },[socket,_output,output])
+  
+
+  
   
     return (
         <div className="output-section">

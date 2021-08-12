@@ -6,7 +6,7 @@ import OutputSection from '../OutpSection/OutputSection'
 import  './body.scss'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { CodeContext } from '../App/App'
+import { AuthContext, CodeContext } from '../App/App'
 import { ToastContext } from '../App/App'
 import { saveCodeReducer,initialSaveCodeState } from '../../reducers/saveCodeReducer'
 import { runCodeReducer,initialRunCodeState } from '../../reducers/runCodeReducer'
@@ -14,19 +14,67 @@ import Loading from '../Loader/Loader'
 import Footer from '../Footer/Footer'
 export const OutputContext = createContext()
 export const SaveCodeContext = createContext()
+// import {io} from "socket.io-client"
+// const SERVER = "http://127.0.0.1:5000";
 function Body() {
-    
   
+ 
    const codeCtx = useContext(CodeContext)
    const {_code,dispatchCode}  = codeCtx
+   const authCtx = useContext(AuthContext)
+   const {_auth}  = authCtx
    const toastCtx = useContext(ToastContext)
-  const {notifySuccess,notifyInfo} = toastCtx
+  const {notifySuccess,notifyInfo,notifyError} = toastCtx
     const [inputData, setInputData] = useState("")
+    const [share, setShare] = useState(_code?.data?.share)
     const [outputData, setOutputData] = useState("")
   const [savedCode, dispatchSaveCode] = useReducer(saveCodeReducer, initialSaveCodeState)
   const [output, dispatchRunCode] = useReducer(runCodeReducer, initialRunCodeState)
 
     const codeId = useParams().id
+//   const [socket,setSocket] = useState(io(SERVER))
+
+//     useEffect(() => {
+//         const s = io(SERVER)
+//         setSocket(s)
+//         // console.log(s)
+       
+//         return () => {
+//             s.disconnect()
+//         }
+//     }, [])
+//    useEffect(() => {
+//        socket.emit("input",(inputData,codeId))
+//        socket.on("input",(input)=>{
+//         // console.log("inputData",input)
+
+//         setInputData(input)
+//        })
+//    },[socket,inputData])
+  
+      
+    
+   
+   
+// useEffect(() => {
+//     // console.log("cedit",_code?.user_id,user_id)
+//     // console.log("share",share)
+//     // if(_code.data.user_id!==_auth?.data?.user?.id)
+//     // {
+//         console.log("getting user_id",_code.data.user_id,_auth?.data?.user?.id)
+//     //        if(_code?.data?.user_id!==_auth?.data?.user?.id && _code?.data?.user_id!==undefined)
+//     // {
+//         socket.on("send_share",(_share)=>{
+//         console.log("Share is getting ",_share)
+
+//             // if(!_share){
+//             //     window.location.assign("/")
+//             // }
+//         })
+//     // }
+    
+// }, [socket])
+    
     const handleSaveCode = async (e, title, code, format, lang) => {
         e.preventDefault()
         // const event = dispatchEvent(new KeyboardEvent())
@@ -59,6 +107,7 @@ function Body() {
     const setInput = (e, data) => {
         e.preventDefault()
         setInputData(data)
+        // && _code.data.user_id!==undefined
     }
 
 
@@ -108,6 +157,7 @@ const fetchCode = async() =>{
 try{
   let response = await fetch("http://localhost:5000/code/"+codeId,{credentials:"include"})
   response = await response.json()
+ setShare(response.share)
 dispatchCode({type:"SUCCESS",payload:response})
 
 //   console.log("code",code)
@@ -120,14 +170,54 @@ dispatchCode({type:"FAILURE",payload:e.message})
 }
 }
 
-const shareCode = ()=>{
-    notifyInfo("Copy the url to share the code",{autoClose:3000})
+const shareCode = async()=>{
+    if(_code?.data?.user_id===_auth?.data?.user?.id)
+    {
+        const response = await fetch("http://localhost:5000/code/"+_code?.data?._id,{
+            credentials:"include",
+            method: "POST",
+            body: JSON.stringify({ share:!share}),
+            headers: { "Content-Type": "application/json" },
+
+        })
+        
+        setShare(!share)
+        console.log(await response.json())
+        if(!share)
+        notifySuccess("Copy the url to share the code",{autoClose:3000})
+        else
+        notifyInfo("Disabled sharing",{autoClose:3000})
+
+    }
+   
 }
 
     useEffect(() => {
         fetchCode()
         
     }, [])
+    // useEffect(() => {
+    //     console.log("IP",inputData)
+    // }, [inputData])
+
+    // useEffect(() => {
+        // console.log("_code?.data?.share",_code?.data?.share)
+        // setShare(_code?.data?.share)
+        
+    // }, [_code?.data?.share])
+//     useEffect(() => {
+//         console.log(_code?.data?.user_id,_auth?.data?.user?.id)
+
+//         if( _code.data.user_id!==_auth.data.user.id && _auth.data.user_id!==undefined)
+// {
+//     notifyError("Your are not authorized to view this code")
+// }
+
+        
+//     }, [_code.data.user_id])
+    // console.log("_code?.data?.user_id",_code?.data?.user_id)
+    //     console.log("_auth?.data?.user.id",_auth?.data?.user?.id)
+    //     console.log("_code?.data?.share",_code?.data?.share)
     return (
     <OutputContext.Provider value={{output}}>
 
@@ -138,11 +228,11 @@ const shareCode = ()=>{
              
 
                     !_code.loading ?(
-                        !_code?.data?.status ?(
+                        !_code?.data?.status &&((_code?.data?.user_id===_auth?.data?.user?.id)||(_code?.data?.share===true))?(
                     <>
-            <CodeEditor saveCode={handleSaveCode} runCode={handleRunCode} _code = {_code.data} shareCode = {shareCode}/>
-            <InputSection setInput={setInput}  />
-            <OutputSection />
+            <CodeEditor saveCode={handleSaveCode} runCode={handleRunCode} _code = {_code.data} shareCode = {shareCode} share = {share} user_id = {_auth?.data?.user?.id}/>
+            <InputSection setInput={setInput} codeId={codeId}  />
+            <OutputSection codeId={codeId} />
             <Footer/>
                     </>):(
                      

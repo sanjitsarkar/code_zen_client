@@ -17,11 +17,52 @@ var beautify = ace.require("ace/ext/beautify"); // get reference to extension
 // var editor = ace.edit("editor"); // get reference to editor
 // beautify.beautify(editor.session);
 import {io} from "socket.io-client"
-import Loading from '../Loader/Loader'
 const SERVER = "http://127.0.0.1:5000";
+import Loading from '../Loader/Loader'
 const INTERVAL = 10000
-function CodeEditor({ saveCode,runCode,_code,shareCode}) {
+import Switch from "react-switch";
+function CodeEditor({ saveCode,runCode,_code,shareCode,share,user_id}) {
+    
+    const [socket,setSocket] = useState(io(SERVER))
 
+    useEffect(() => {
+        const s = io(SERVER)
+        setSocket(s)
+        // console.log(s)
+       
+        return () => {
+            s.disconnect()
+        }
+    }, [])
+  
+    useEffect(() => {
+        if(_code?.user_id===user_id)
+        {
+            console.log("Share is sending ",share)
+
+        socket.emit("send_share",share,_code._id)
+        }
+       
+        
+    },[socket,share])
+
+   
+     // const [socket,setSocket] = useState(io(SERVER))
+
+    // useEffect(() => {
+    if(_code.user_id!==user_id)
+     {
+    //      console.log()
+        socket.on("send_share",_share=>{
+            // console.log(_code._id)
+            // console.log("Share is getting ",_share)
+                if(!_share){
+                    window.location.assign("/")
+                }
+            }) 
+        }
+// },[socket])
+    
     // const codeCtx = useContext(CodeContext)
     // const {_code,dispatchCode}  = codeCtx
     // const [socket, setSocket] = useState("undefined.py")
@@ -38,9 +79,11 @@ function CodeEditor({ saveCode,runCode,_code,shareCode}) {
     const [output, setOutput] = useState("")
     const [code, setCode] = useState(_code.code)
     const [run, setRun] = useState(false)
+    // const [_share, setShare] = useState(_code.share)
     const [toggleClass, setToggleClass] = useState("file-name")
 
 //  console.log("id",id)
+
 useEffect(() => {
     changeFileFormat(language)
 }, [])
@@ -178,7 +221,7 @@ int main() {
     //     const interval = setInterval(() => {
     //         // console.log("saved",code,title,language,format)
     //         socket.emit("save_code",code,title,language,format)
-    //     }, INTERVAL);
+    //     }, INTERVAL);http://localhost:3000/code/6112b05dbdfc540d6ed07ced
     //     return ()=>{
     //         clearInterval(interval)
     //     }
@@ -209,7 +252,38 @@ int main() {
     // }, [])
 //   console.log(beautify.beautify())
    
-  
+// useEffect(() => {
+//     console.log("cedit",_code?.user_id,user_id)
+//     console.log("share",share)
+//     if(_code.user_id!==user_id)
+//     {
+//         console.log("user_id",user_id)
+//         socket.on("send_share",(share)=>{
+//         console.log("Share is getting ",share)
+
+//             if(!share){
+//                 window.location.assign("/")
+//             }
+//         })
+//     }
+    
+// }, [socket])
+// useEffect(() => {
+//     socket.on("send_share",(_share)=>{
+//         console.log("_share",_share)
+//     })
+// }, [socket])
+// useEffect(() => {
+//     // console.log("code",code)
+//     //    if(socket===null) console.log("null")
+//     socket.emit("code",code,_code._id)
+     
+//        socket.on("code",(_code)=>{
+//         // console.log("COOOOO",_code)
+//         setCode(_code)
+//     })
+//    },[socket,code])
+
     return (
         <div className="code-editor">
             {/* <Loader/> */}
@@ -242,11 +316,13 @@ int main() {
                             <i className="fa fa-play" aria-hidden="true" ></i>
                         
                     </div>
-                    <div className="share" onClick={(e) =>shareCode(e)}>
-                       
-                            <i className="fa fa-share" aria-hidden="true" ></i>
-                        
-                    </div>
+                    {
+
+                    _code.user_id==user_id &&(<label className="share" htmlFor="">
+                        <span>Share</span>
+                    <Switch placeholder="Share" width={60} height = {25} className="share-switch" onChange={(e) =>shareCode(e)} checked={share} />
+                    </label>)
+}
 
                     </div>
           </div>
