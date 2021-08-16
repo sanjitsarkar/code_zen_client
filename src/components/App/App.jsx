@@ -33,7 +33,7 @@ export default function App() {
   const getUser = async () => {
     try {
     dispatchAuth({type:"LOADING"})
-      let response = await fetch("http://localhost:5000/user", {credentials:"include"})
+      let response = await fetch("https://codezzen.herokuapp.com/user", {credentials:"include"})
       response = await response.json()
       // console.log(response?.user);
     dispatchAuth({type:"SUCCESS",payload:response})

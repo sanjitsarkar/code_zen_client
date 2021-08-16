@@ -16,7 +16,7 @@ function Header() {
               try {
     dispatchAuth({type:"LOADING"})
 
-            let response = await fetch("http://localhost:5000/logout", {
+            let response = await fetch("https://codezzen.herokuapp.com/logout", {
                 credentials: "include",
                 
             })

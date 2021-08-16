@@ -4,16 +4,16 @@ import {io} from "socket.io-client"
 import { OutputContext } from '../Body/Body';
 import Loading from '../Loader/Loader';
 import  "./output_section.scss"
-const SERVER = "http://127.0.0.1:5000";
+const SERVER = "https://codezzen.herokuapp.com";
 const socket = io(SERVER)
 function OutputSection({codeId}) {
     const outputCtx = useContext(OutputContext)
     const {output} = outputCtx
-    const [_output, setOutput] = useState(OutputContext?.data?.output)
-    // useEffect(() => {
-    //      setOutput(output.data.output)
+    const [_output, setOutput] = useState(output?.data?.output)
+    useEffect(() => {
+         setOutput(output.data.output)
 
-    // }, [])
+    }, [output])
    
     // const [socket,setSocket] = useState(io(SERVER))
 

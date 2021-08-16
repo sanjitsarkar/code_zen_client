@@ -27,7 +27,7 @@ const Home = () => {
         try{
         dispatchCodes({type:"LOADING"})
     
-      let response = await fetch("http://localhost:5000/codes",{credentials:"include"})
+      let response = await fetch("https://codezzen.herokuapp.com/codes",{credentials:"include"})
       response = await response.json()
       dispatchCodes({type:"SUCCESS",payload:response})
     
@@ -51,7 +51,7 @@ const Home = () => {
             }
         dispatchCodes({type:"LOADING"})
     
-      let response = await fetch("http://localhost:5000/codes",{credentials:"include",
+      let response = await fetch("https://codezzen.herokuapp.com/codes",{credentials:"include",
     method:"POST",
     body:JSON.stringify({search}),
     headers: {"Content-Type":"application/json"}
@@ -83,7 +83,7 @@ const format = {
     "cpp":"cpp",
     "javascript":"js"
 }
-        let response = await fetch("http://localhost:5000/save", {
+        let response = await fetch("https://codezzen.herokuapp.com/save", {
                 method: "POST",
                 body: JSON.stringify({ title:fileName, code:"", format:format[language], lang:language}),
                 credentials: "include",
@@ -111,7 +111,7 @@ const deleteCode = async(e,id) =>{
     try{
     // dispatchCodes({type:"LOADING"})
 
-  let response = await fetch("http://localhost:5000/code/"+id, {
+  let response = await fetch("https://codezzen.herokuapp.com/code/"+id, {
     method: "DELETE",
     body: JSON.stringify({ id}),
     credentials: "include",

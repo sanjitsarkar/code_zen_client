@@ -43,7 +43,7 @@ function Signup({isModalOpen,closeModal}) {
         try {
     dispatchAuth({type:"LOADING"})
 
-            let response = await fetch("http://localhost:5000/signup", {
+            let response = await fetch("https://codezzen.herokuapp.com/signup", {
                 method: "POST",
                 body: JSON.stringify({ name, email, password }),
                 credentials: "include",

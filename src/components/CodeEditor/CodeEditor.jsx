@@ -17,7 +17,7 @@ var beautify = ace.require("ace/ext/beautify"); // get reference to extension
 // var editor = ace.edit("editor"); // get reference to editor
 // beautify.beautify(editor.session);
 import {io} from "socket.io-client"
-const SERVER = "http://127.0.0.1:5000";
+const SERVER = "https://codezzen.herokuapp.com";
 import Loading from '../Loader/Loader'
 const INTERVAL = 10000
 import Switch from "react-switch";
@@ -186,7 +186,7 @@ int main() {
 
 
     // try{
-    //   let response = await fetch("http://localhost:5000/code/"+id,{credentials:"include"})
+    //   let response = await fetch("https://codezzen.herokuapp.com/code/"+id,{credentials:"include"})
     //   response = await response.json()
     //   setLoading(false)
     //   setCode(response.code)

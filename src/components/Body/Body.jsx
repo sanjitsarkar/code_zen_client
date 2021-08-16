@@ -15,7 +15,7 @@ import Footer from '../Footer/Footer'
 export const OutputContext = createContext()
 export const SaveCodeContext = createContext()
 // import {io} from "socket.io-client"
-// const SERVER = "http://127.0.0.1:5000";
+// const SERVER = "https://codezzen.herokuapp.com";
 function Body() {
   
  
@@ -83,7 +83,7 @@ function Body() {
         try {
             dispatchSaveCode({type:"LOADING"})
             console.log("Id",codeId)
-            let response = await fetch("http://localhost:5000/save", {
+            let response = await fetch("https://codezzen.herokuapp.com/save", {
                 method: "POST",
                 body: JSON.stringify({ title, code, format, lang,_id:codeId }),
                 credentials: "include",
@@ -127,7 +127,7 @@ function Body() {
                 else
                     Idata = inputData
                     
-            let response = await fetch("http://localhost:5000/compile", {
+            let response = await fetch("https://codezzen.herokuapp.com/compile", {
                 method: "POST",
                 body: JSON.stringify({ id:codeId,input:Idata}),
                 credentials: "include",
@@ -155,7 +155,7 @@ function Body() {
 const fetchCode = async() =>{
     dispatchCode({type:"LOADING"})
 try{
-  let response = await fetch("http://localhost:5000/code/"+codeId,{credentials:"include"})
+  let response = await fetch("https://codezzen.herokuapp.com/code/"+codeId,{credentials:"include"})
   response = await response.json()
  setShare(response.share)
 dispatchCode({type:"SUCCESS",payload:response})
@@ -173,7 +173,7 @@ dispatchCode({type:"FAILURE",payload:e.message})
 const shareCode = async()=>{
     if(_code?.data?.user_id===_auth?.data?.user?.id)
     {
-        const response = await fetch("http://localhost:5000/code/"+_code?.data?._id,{
+        const response = await fetch("https://codezzen.herokuapp.com/code/"+_code?.data?._id,{
             credentials:"include",
             method: "POST",
             body: JSON.stringify({ share:!share}),

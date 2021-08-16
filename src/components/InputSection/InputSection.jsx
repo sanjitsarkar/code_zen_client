@@ -1,7 +1,7 @@
 import React, { useState,useRef,useEffect } from 'react'
 import './input_section.scss'
 import {io} from "socket.io-client"
-const SERVER = "http://127.0.0.1:5000";
+const SERVER = "https://codezzen.herokuapp.com";
 const socket = io(SERVER)
 function InputSection({ setInput,codeId}) {
     const [InputData, setInputData] = useState("")

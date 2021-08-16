@@ -48,7 +48,7 @@ function Login({isModalOpen,closeModal}) {
         e.preventDefault()
         try {
     dispatchAuth({type:"LOADING"})
-            let response = await fetch("http://localhost:5000/login", {
+            let response = await fetch("https://codezzen.herokuapp.com/login", {
                 method: "POST",
                 body: JSON.stringify({ email, password }),
                 credentials: "include",
