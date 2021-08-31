@@ -49,7 +49,7 @@ function Login({isModalOpen,closeModal}) {
         e.preventDefault()
         try {
     dispatchAuth({type:"LOADING"})
-            let response = await fetch(hostUrl+"/login", {
+            let response = await fetch(hostUrl+"login", {
                 method: "POST",
                 body: JSON.stringify({ email, password }),
                 credentials: "include",

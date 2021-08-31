@@ -84,7 +84,7 @@ function Body() {
         try {
             dispatchSaveCode({type:"LOADING"})
             console.log("Id",codeId)
-            let response = await fetch(hostUrl+"/save", {
+            let response = await fetch(hostUrl+"save", {
                 method: "POST",
                 body: JSON.stringify({ title, code, format, lang,_id:codeId }),
                 credentials: "include",
@@ -128,7 +128,7 @@ function Body() {
                 else
                     Idata = inputData
                     
-            let response = await fetch(hostUrl+"/compile", {
+            let response = await fetch(hostUrl+"compile", {
                 method: "POST",
                 body: JSON.stringify({ id:codeId,input:Idata}),
                 credentials: "include",
@@ -156,7 +156,7 @@ function Body() {
 const fetchCode = async() =>{
     dispatchCode({type:"LOADING"})
 try{
-  let response = await fetch(hostUrl+"/code/"+codeId,{credentials:"include"})
+  let response = await fetch(hostUrl+"code/"+codeId,{credentials:"include"})
   response = await response.json()
  setShare(response.share)
 dispatchCode({type:"SUCCESS",payload:response})
@@ -174,7 +174,7 @@ dispatchCode({type:"FAILURE",payload:e.message})
 const shareCode = async()=>{
     if(_code?.data?.user_id===_auth?.data?.user?.id)
     {
-        const response = await fetch(hostUrl+"/code/"+_code?.data?._id,{
+        const response = await fetch(hostUrl+"code/"+_code?.data?._id,{
             credentials:"include",
             method: "POST",
             body: JSON.stringify({ share:!share}),

@@ -44,7 +44,7 @@ function Signup({isModalOpen,closeModal}) {
         try {
     dispatchAuth({type:"LOADING"})
 
-            let response = await fetch(hostUrl+"/signup", {
+            let response = await fetch(hostUrl+"signup", {
                 method: "POST",
                 body: JSON.stringify({ name, email, password }),
                 credentials: "include",

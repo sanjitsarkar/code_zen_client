@@ -32,7 +32,7 @@ export default function App() {
   const getUser = async () => {
     try {
     dispatchAuth({type:"LOADING"})
-      let response = await fetch(hostUrl+"/user", {credentials:"include"})
+      let response = await fetch(hostUrl+"user", {credentials:"include"})
       response = await response.json()
       // console.log(response?.user);
     dispatchAuth({type:"SUCCESS",payload:response})
