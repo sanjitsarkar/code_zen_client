@@ -1,6 +1,4 @@
 import React,{useState} from 'react'
-import CodeGIF from "../../assets/demo.gif"
-import CodeIMG from "../../assets/code.png"
 import Signup from '../Signup/Signup'
 import "./landing_page.scss"
 
