@@ -12,6 +12,7 @@ import { saveCodeReducer,initialSaveCodeState } from '../../reducers/saveCodeRed
 import { runCodeReducer,initialRunCodeState } from '../../reducers/runCodeReducer'
 import Loading from '../Loader/Loader'
 import Footer from '../Footer/Footer'
+import hostUrl from '../../env'
 export const OutputContext = createContext()
 export const SaveCodeContext = createContext()
 // import {io} from "socket.io-client"
@@ -83,7 +84,7 @@ function Body() {
         try {
             dispatchSaveCode({type:"LOADING"})
             console.log("Id",codeId)
-            let response = await fetch("https://codezzen.herokuapp.com/save", {
+            let response = await fetch(hostUrl+"/save", {
                 method: "POST",
                 body: JSON.stringify({ title, code, format, lang,_id:codeId }),
                 credentials: "include",
@@ -127,7 +128,7 @@ function Body() {
                 else
                     Idata = inputData
                     
-            let response = await fetch("https://codezzen.herokuapp.com/compile", {
+            let response = await fetch(hostUrl+"/compile", {
                 method: "POST",
                 body: JSON.stringify({ id:codeId,input:Idata}),
                 credentials: "include",
@@ -155,7 +156,7 @@ function Body() {
 const fetchCode = async() =>{
     dispatchCode({type:"LOADING"})
 try{
-  let response = await fetch("https://codezzen.herokuapp.com/code/"+codeId,{credentials:"include"})
+  let response = await fetch(hostUrl+"/code/"+codeId,{credentials:"include"})
   response = await response.json()
  setShare(response.share)
 dispatchCode({type:"SUCCESS",payload:response})
@@ -173,7 +174,7 @@ dispatchCode({type:"FAILURE",payload:e.message})
 const shareCode = async()=>{
     if(_code?.data?.user_id===_auth?.data?.user?.id)
     {
-        const response = await fetch("https://codezzen.herokuapp.com/code/"+_code?.data?._id,{
+        const response = await fetch(hostUrl+"/code/"+_code?.data?._id,{
             credentials:"include",
             method: "POST",
             body: JSON.stringify({ share:!share}),

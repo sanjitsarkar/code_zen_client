@@ -1,6 +1,5 @@
 import React, { useEffect, useState,useReducer,createContext } from 'react'
 import Body from '../Body/Body'
-import Footer from '../Footer/Footer'
 import Header from '../Header/Header'
 import './App.scss'
 import '../Body/body.scss'
@@ -10,7 +9,7 @@ import {initialAuthState,authReducer} from '../../reducers/authReducer'
 import { initialCodesState,codesReducer } from '../../reducers/codesReducer'
 import { initialCodeState,codeReducer } from '../../reducers/codeReducer'
 import Home from '../Home/Home'
-import Loader from '../Loader/Loader'
+import hostUrl from '../../env'
 import { toast, ToastContainer } from 'react-toastify'
 import LandingPage from '../LandingPage/LandingPage'
 export const AuthContext = createContext()
@@ -33,7 +32,7 @@ export default function App() {
   const getUser = async () => {
     try {
     dispatchAuth({type:"LOADING"})
-      let response = await fetch("https://codezzen.herokuapp.com/user", {credentials:"include"})
+      let response = await fetch(hostUrl+"/user", {credentials:"include"})
       response = await response.json()
       // console.log(response?.user);
     dispatchAuth({type:"SUCCESS",payload:response})
@@ -55,7 +54,6 @@ export default function App() {
     <AuthContext.Provider value={{_auth,dispatchAuth}}>
     <CodeContext.Provider value={{_code,dispatchCode}}>
     <CodesContext.Provider value={{_codes,dispatchCodes}}>
-    <BrowserRouter>
     <>
     <ToastContainer
 position="top-right"
@@ -126,7 +124,7 @@ pauseOnHover
       
     </div>
     </>
-    </BrowserRouter>
+   
     </CodesContext.Provider>
     </CodeContext.Provider>
     </AuthContext.Provider>

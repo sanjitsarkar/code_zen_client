@@ -1,5 +1,4 @@
-import React, { useEffect, useState,useContext,useRef, createRef } from 'react'
-import { CodeContext } from '../App/App'
+import React, { useEffect, useState, createRef } from 'react'
 import AceEditor from 'react-ace'
 // import socket from "../socket/socket"
 // // import mode-<language> , this imports the style and colors for the selected language.
@@ -9,6 +8,7 @@ import 'ace-builds/src-noconflict/mode-c_cpp'
 // // there are many themes to import, I liked monokai.
 import 'ace-builds/src-noconflict/theme-monokai'
 // // this is an optional import just improved the interaction.
+ace.config.set('basePath', 'path')
 import 'ace-builds/src-noconflict/ext-language_tools'
 import 'ace-builds/src-noconflict/ext-beautify'
 import './code_editor.scss'
@@ -16,8 +16,9 @@ import Beautify from 'ace-builds/src-noconflict/ext-beautify'
 var beautify = ace.require("ace/ext/beautify"); // get reference to extension
 // var editor = ace.edit("editor"); // get reference to editor
 // beautify.beautify(editor.session);
+import hostUrl from '../../env'
 import {io} from "socket.io-client"
-const SERVER = "https://codezzen.herokuapp.com";
+const SERVER = hostUrl;
 import Loading from '../Loader/Loader'
 const INTERVAL = 10000
 import Switch from "react-switch";
@@ -353,7 +354,6 @@ int main() {
                     enableMultiselect: true,
                     fixedWidthGutter: true,
                     mergeUndoDeltas: "always",
-                    spellcheck:true,
                 enableBasicAutocompletion: true,
                 enableLiveAutocompletion: true,
                 enableSnippets: true,
@@ -361,7 +361,6 @@ int main() {
                 showLineNumbers: true,
                 animatedScroll: true,
                 autoScrollEditorIntoView: true,
-                enableEmmet: true,
                 fadeFoldWidgets: true,
                 tabSize: 4,
                 cursorStyle:"smooth"

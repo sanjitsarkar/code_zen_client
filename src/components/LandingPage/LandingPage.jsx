@@ -3,7 +3,6 @@ import Signup from '../Signup/Signup'
 import "./landing_page.scss"
 
 const LandingPage = () => {
-    const [isModalOpenLogin, setIsModalOpenLogin] = useState(false)
     const [isModalOpenSignup, setIsModalOpenSignup] = useState(false)
     return (
         <div id="landing-page">

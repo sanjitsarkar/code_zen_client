@@ -3,6 +3,7 @@ import { AuthContext, ToastContext } from '../App/App'
 import useInput from '../hooks/useInput'
 import Modal from 'react-modal'
 import "../Login/Login.scss"
+import hostUrl from '../../env'
 const customStyles = {
     overlay: {
         position: 'fixed',
@@ -43,7 +44,7 @@ function Signup({isModalOpen,closeModal}) {
         try {
     dispatchAuth({type:"LOADING"})
 
-            let response = await fetch("https://codezzen.herokuapp.com/signup", {
+            let response = await fetch(hostUrl+"/signup", {
                 method: "POST",
                 body: JSON.stringify({ name, email, password }),
                 credentials: "include",
@@ -52,13 +53,13 @@ function Signup({isModalOpen,closeModal}) {
             })
             response = await response.json()
             if(response.errors){
-                if(response.errors.includes("duplicate"))
+                if(response?.errors?.includes("duplicate"))
                 {
                 notifyError("Account with this email already exists",{autoClose:2000})
 
                 }
                 else{
-                notifyError(response.errors,{autoClose:4000})
+                notifyError(response?.errors,{autoClose:4000})
                 }
                 dispatchAuth({type:"FAILURE",payload:response.errors})
                 }

@@ -3,6 +3,7 @@ import useInput from '../hooks/useInput'
 import Modal from 'react-modal'
 import { AuthContext,ToastContext } from '../App/App'
 import "./Login.scss"
+import hostUrl from '../../env'
 const customStyles = {
     overlay: {
         position: 'fixed',
@@ -48,7 +49,7 @@ function Login({isModalOpen,closeModal}) {
         e.preventDefault()
         try {
     dispatchAuth({type:"LOADING"})
-            let response = await fetch("https://codezzen.herokuapp.com/login", {
+            let response = await fetch(hostUrl+"/login", {
                 method: "POST",
                 body: JSON.stringify({ email, password }),
                 credentials: "include",
@@ -82,8 +83,8 @@ function Login({isModalOpen,closeModal}) {
          id="modal-login"
         isOpen={isModalOpen}
         onRequestClose={closeModal}
-        shouldCloseOnEsc="true"
-        shouldCloseOnOverlayClick="true"
+        shouldCloseOnEsc={true}
+        shouldCloseOnOverlayClick={true}
         style={customStyles}
         contentLabel="Signup"
         >
